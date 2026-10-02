@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TechQuiz - Admin Login</title><style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0f172a,#312e81);
+    color:white;
+    padding:20px;
+}
+
+.login-box{
+    width:100%;
+    max-width:420px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:25px;
+    padding:35px;
+    text-align:center;
+}
+
+.icon{
+    font-size:60px;
+}
+
+h1{
+    margin:15px 0 8px;
+}
+
+.subtitle{
+    color:#94a3b8;
+    margin-bottom:25px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin:8px 0;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    background:#1e293b;
+    color:white;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:none;
+    border-radius:25px;
+    background:#38bdf8;
+    color:#0f172a;
+    font-weight:bold;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.error{
+    color:#fca5a5;
+    margin-top:15px;
+}
+
+</style></head><body><div class="login-box"><div class="icon">
+    🛡️
+</div>
+
+<h1>
+    Admin Login
+</h1>
+
+<p class="subtitle">
+    TechQuiz Administration
+</p>
+
+<input
+    type="text"
+    id="username"
+    placeholder="Admin Username"
+>
+
+<input
+    type="password"
+    id="password"
+    placeholder="Admin Password"
+>
+
+<button onclick="adminLogin()">
+    Login
+</button>
+
+<div
+    class="error"
+    id="error">
+</div>
+
+</div><script>
+
+function adminLogin(){
+
+    const username =
+        document.getElementById("username")
+        .value
+        .trim();
+
+    const password =
+        document.getElementById("password")
+        .value;
+
+
+    /* ADMIN LOGIN DETAILS */
+const ADMIN_USERNAME = "Jaisurya";
+const ADMIN_PASSWORD = "Jai@2026";
+
+
+    if(
+        username === ADMIN_USERNAME &&
+        password === ADMIN_PASSWORD
+    ){
+
+        localStorage.setItem(
+            "adminLoggedIn",
+            "true"
+        );
+
+        window.location.href =
+            "admin.html";
+
+    }
+    else{
+
+        document.getElementById(
+            "error"
+        ).innerText =
+            "Invalid admin username or password.";
+
+    }
+
+}
+
+</script></body></html>

@@ -1,0 +1,2880 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>TechQuiz - Quiz</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#312e81);
+    color:white;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:850px;
+    margin:auto;
+}
+
+/* HEADER */
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#38bdf8;
+}
+
+.home-btn{
+    padding:9px 18px;
+    border:1px solid #38bdf8;
+    border-radius:20px;
+    background:transparent;
+    color:white;
+    cursor:pointer;
+}
+
+/* QUIZ BOX */
+
+.quiz-box{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:25px;
+    padding:30px;
+}
+
+/* TOP */
+
+.quiz-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.topic{
+    color:#38bdf8;
+    font-weight:bold;
+    font-size:18px;
+}
+
+.progress{
+    color:#cbd5e1;
+}
+
+/* PROGRESS BAR */
+
+.progress-bg{
+    width:100%;
+    height:8px;
+    background:#334155;
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:30px;
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    background:#38bdf8;
+    transition:0.3s;
+}
+
+/* QUESTION */
+
+.question-number{
+    color:#94a3b8;
+    margin-bottom:10px;
+}
+
+.question{
+    font-size:24px;
+    line-height:1.5;
+    margin-bottom:25px;
+}
+
+/* OPTIONS */
+
+.options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.option{
+    padding:18px;
+    border:1px solid #475569;
+    border-radius:16px;
+    background:rgba(255,255,255,0.06);
+    color:white;
+    text-align:left;
+    cursor:pointer;
+    font-size:16px;
+    transition:0.2s;
+}
+
+.option:hover{
+    border-color:#38bdf8;
+    transform:translateY(-2px);
+}
+
+.option.selected{
+    border-color:#38bdf8;
+    background:rgba(56,189,248,0.15);
+}
+
+/* NEXT */
+
+.next-btn{
+    width:100%;
+    margin-top:25px;
+    padding:14px;
+    border:none;
+    border-radius:25px;
+    background:#38bdf8;
+    color:#0f172a;
+    font-weight:bold;
+    font-size:17px;
+    cursor:pointer;
+}
+
+.next-btn:disabled{
+    opacity:0.45;
+    cursor:not-allowed;
+}
+
+/* RESULT */
+
+#resultScreen{
+    display:none;
+}
+
+.result-box{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:25px;
+    padding:35px;
+    text-align:center;
+}
+
+.result-icon{
+    font-size:65px;
+}
+
+.result-box h1{
+    margin:15px 0;
+}
+
+.score{
+    font-size:48px;
+    color:#38bdf8;
+    font-weight:bold;
+    margin:15px 0;
+}
+
+.result-details{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin:25px 0;
+}
+
+.result-card{
+    background:rgba(255,255,255,0.07);
+    padding:18px;
+    border-radius:16px;
+}
+
+.result-number{
+    font-size:25px;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.result-label{
+    color:#94a3b8;
+    font-size:13px;
+}
+
+/* RESULT BUTTONS */
+
+.result-buttons{
+    display:flex;
+    gap:15px;
+    margin-top:20px;
+}
+
+.result-btn{
+    flex:1;
+    padding:13px;
+    border:none;
+    border-radius:22px;
+    background:#38bdf8;
+    color:#0f172a;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result-btn.secondary{
+    background:transparent;
+    border:1px solid #38bdf8;
+    color:white;
+}
+
+/* WRONG ANSWERS */
+
+#wrongScreen{
+    display:none;
+    margin-top:25px;
+}
+
+.wrong-title{
+    font-size:22px;
+    margin-bottom:15px;
+}
+
+.wrong-card{
+    background:rgba(239,68,68,0.08);
+    border:1px solid rgba(239,68,68,0.4);
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:15px;
+}
+
+.wrong-question{
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:15px;
+    line-height:1.5;
+}
+
+.your-answer{
+    color:#fca5a5;
+    margin-bottom:8px;
+}
+
+.correct-answer{
+    color:#86efac;
+}
+
+.no-wrong{
+    background:rgba(34,197,94,0.1);
+    border:1px solid rgba(34,197,94,0.4);
+    padding:25px;
+    border-radius:18px;
+    text-align:center;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:600px){
+
+    .quiz-box{
+        padding:22px;
+    }
+
+    .options{
+        grid-template-columns:1fr;
+    }
+
+    .question{
+        font-size:20px;
+    }
+
+    .result-details{
+        grid-template-columns:1fr;
+    }
+
+    .result-buttons{
+        flex-direction:column;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+
+<!-- =========================
+     QUIZ SCREEN
+========================= -->
+
+<div id="quizScreen">
+
+
+<div class="header">
+
+<div class="logo">
+🧠 Tech<span>Quiz</span>
+</div>
+
+<button
+class="home-btn"
+onclick="goHome()">
+
+← Home
+
+</button>
+
+</div>
+
+
+<div class="quiz-box">
+
+
+<div class="quiz-top">
+
+<div
+class="topic"
+id="topicName">
+
+Topic
+
+</div>
+
+<div
+class="progress"
+id="progressText">
+
+Question 1 / 10
+
+</div>
+
+</div>
+
+
+<div class="progress-bg">
+
+<div
+class="progress-fill"
+id="progressFill">
+
+</div>
+
+</div>
+
+
+<div
+class="question-number"
+id="questionNumber">
+
+Question 1
+
+</div>
+
+
+<div
+class="question"
+id="questionText">
+
+Loading question...
+
+</div>
+
+
+<div
+class="options"
+id="optionsContainer">
+
+</div>
+
+
+<button
+class="next-btn"
+id="nextButton"
+onclick="nextQuestion()"
+disabled>
+
+Next Question →
+
+</button>
+
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     RESULT SCREEN
+========================= -->
+
+<div id="resultScreen">
+
+
+<div class="result-box">
+
+<div class="result-icon">
+🏆
+</div>
+
+<h1>
+Quiz Completed!
+</h1>
+
+<p id="resultTopic">
+Technical Quiz
+</p>
+
+
+<div
+class="score"
+id="finalScore">
+
+0/10
+
+</div>
+
+
+<div class="result-details">
+
+
+<div class="result-card">
+
+<div
+class="result-number"
+id="correctCount">
+
+0
+
+</div>
+
+<div class="result-label">
+Correct
+</div>
+
+</div>
+
+
+<div class="result-card">
+
+<div
+class="result-number"
+id="wrongCount">
+
+0
+
+</div>
+
+<div class="result-label">
+Wrong Answers
+</div>
+
+</div>
+
+
+<div class="result-card">
+
+<div
+class="result-number"
+id="percentage">
+
+0%
+
+</div>
+
+<div class="result-label">
+Percentage
+</div>
+
+</div>
+
+
+</div>
+
+
+<div class="result-buttons">
+
+<button
+class="result-btn"
+onclick="showWrongAnswers()">
+
+🔍 Preview Wrong Answers
+
+</button>
+
+
+<button
+class="result-btn secondary"
+onclick="goHome()">
+
+🏠 Back to Home
+
+</button>
+
+</div>
+
+
+</div>
+
+
+<!-- WRONG ANSWERS -->
+
+<div id="wrongScreen">
+
+<div class="wrong-title">
+
+❌ Wrong Answer Review
+
+</div>
+
+<div id="wrongContainer">
+
+</div>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   GET QUIZ DETAILS
+===================================================== */
+
+const selectedTopic =
+    localStorage.getItem("selectedTopic");
+
+let questionCount =
+    parseInt(
+        localStorage.getItem("questionCount")
+    ) || 10;
+
+
+/* =====================================================
+   QUESTION BANK
+===================================================== */
+
+const questionBank = {
+
+
+/* ================= AIML ================= */
+
+"Artificial Intelligence":[
+
+{
+q:"What is Artificial Intelligence?",
+o:[
+"Technology that enables machines to perform tasks requiring human-like intelligence",
+"Technology used only for storing files",
+"A type of computer hardware",
+"A programming language"
+],
+a:0
+},
+
+{
+q:"Which of the following is an application of AI?",
+o:[
+"Face recognition",
+"Keyboard cleaning",
+"Battery charging",
+"Screen brightness"
+],
+a:0
+},
+
+{
+q:"What is the main goal of AI?",
+o:[
+"To make machines perform intelligent tasks",
+"To increase monitor size",
+"To replace computer memory",
+"To create network cables"
+],
+a:0
+},
+
+{
+q:"Which AI area deals with understanding human language?",
+o:[
+"Natural Language Processing",
+"Database Management",
+"Computer Hardware",
+"Operating Systems"
+],
+a:0
+},
+
+{
+q:"Which technology allows computers to identify objects in images?",
+o:[
+"Computer Vision",
+"Word Processing",
+"File Compression",
+"Disk Formatting"
+],
+a:0
+},
+
+{
+q:"Which is an example of an AI assistant?",
+o:[
+"Voice assistant",
+"USB cable",
+"Printer cartridge",
+"Keyboard"
+],
+a:0
+},
+
+{
+q:"AI systems can learn from:",
+o:[
+"Data",
+"Only electricity",
+"Monitor size",
+"Keyboard buttons"
+],
+a:0
+},
+
+{
+q:"Which field is closely related to AI?",
+o:[
+"Machine Learning",
+"Mechanical Welding",
+"Painting",
+"Typing"
+],
+a:0
+},
+
+{
+q:"A chatbot is commonly associated with:",
+o:[
+"Artificial Intelligence",
+"Computer hardware assembly",
+"Power supply",
+"Disk partitioning"
+],
+a:0
+},
+
+{
+q:"AI can be used in:",
+o:[
+"Healthcare, education and transportation",
+"Only calculators",
+"Only keyboards",
+"Only printers"
+],
+a:0
+}
+
+],
+
+
+/* ================= MACHINE LEARNING ================= */
+
+"Machine Learning":[
+
+{
+q:"What is Machine Learning?",
+o:[
+"A method where computers learn patterns from data",
+"A method of increasing screen size",
+"A type of computer cable",
+"A database storage device"
+],
+a:0
+},
+
+{
+q:"Which is a type of Machine Learning?",
+o:[
+"Supervised Learning",
+"Manual Learning",
+"Hardware Learning",
+"Keyboard Learning"
+],
+a:0
+},
+
+{
+q:"Supervised learning uses:",
+o:[
+"Labelled data",
+"Only empty files",
+"No data",
+"Only hardware"
+],
+a:0
+},
+
+{
+q:"Which is an example of classification?",
+o:[
+"Predicting whether an email is spam",
+"Measuring monitor size",
+"Formatting a disk",
+"Charging a laptop"
+],
+a:0
+},
+
+{
+q:"Which algorithm can be used for classification?",
+o:[
+"Decision Tree",
+"HTML",
+"USB",
+"BIOS"
+],
+a:0
+},
+
+{
+q:"What is training data?",
+o:[
+"Data used to train a machine learning model",
+"Data used only to charge a device",
+"A type of processor",
+"A network cable"
+],
+a:0
+},
+
+{
+q:"What does a model do in Machine Learning?",
+o:[
+"Learn patterns from data to make predictions",
+"Increase computer brightness",
+"Store electricity",
+"Connect a keyboard"
+],
+a:0
+},
+
+{
+q:"Which is an example of regression?",
+o:[
+"Predicting house prices",
+"Detecting a keyboard",
+"Opening a browser",
+"Formatting a USB"
+],
+a:0
+},
+
+{
+q:"What is overfitting?",
+o:[
+"When a model learns training data too closely",
+"When a computer becomes physically hot",
+"When a file becomes empty",
+"When internet speed increases"
+],
+a:0
+},
+
+{
+q:"Accuracy measures:",
+o:[
+"How many predictions are correct",
+"Computer screen resolution",
+"Internet speed",
+"File size"
+],
+a:0
+}
+
+],
+
+
+/* ================= DEEP LEARNING ================= */
+
+"Deep Learning":[
+
+{
+q:"Deep Learning is mainly based on:",
+o:[
+"Artificial Neural Networks",
+"USB devices",
+"HTML tables",
+"File systems"
+],
+a:0
+},
+
+{
+q:"Which network is commonly used for image processing?",
+o:[
+"CNN",
+"HTML",
+"FTP",
+"SQL"
+],
+a:0
+},
+
+{
+q:"CNN stands for:",
+o:[
+"Convolutional Neural Network",
+"Computer Network Node",
+"Central Neural Number",
+"Connected Network Name"
+],
+a:0
+},
+
+{
+q:"RNN is commonly useful for:",
+o:[
+"Sequential data",
+"Computer cables",
+"Image printing",
+"Disk formatting"
+],
+a:0
+},
+
+{
+q:"A neural network contains:",
+o:[
+"Layers and neurons",
+"Only files",
+"Only cables",
+"Only folders"
+],
+a:0
+},
+
+{
+q:"Deep Learning usually requires:",
+o:[
+"Large amounts of data and computational power",
+"Only a keyboard",
+"Only a printer",
+"No data"
+],
+a:0
+},
+
+{
+q:"Which is a Deep Learning framework?",
+o:[
+"TensorFlow",
+"HTML",
+"CSS",
+"USB"
+],
+a:0
+},
+
+{
+q:"Neural networks learn by adjusting:",
+o:[
+"Weights",
+"Keyboard keys",
+"Monitor pixels",
+"USB ports"
+],
+a:0
+},
+
+{
+q:"Which activation function is commonly used in neural networks?",
+o:[
+"ReLU",
+"HTML",
+"SQL",
+"USB"
+],
+a:0
+},
+
+{
+q:"Deep Learning is a subset of:",
+o:[
+"Machine Learning",
+"Operating Systems",
+"Networking",
+"Database hardware"
+],
+a:0
+}
+
+],
+
+
+/* ================= COMPUTER VISION ================= */
+
+"Computer Vision":[
+
+{
+q:"Computer Vision mainly deals with:",
+o:[
+"Understanding images and videos",
+"Managing passwords",
+"Writing documents",
+"Managing databases"
+],
+a:0
+},
+
+{
+q:"Which is an example of Computer Vision?",
+o:[
+"Face recognition",
+"Email writing",
+"File compression",
+"Password creation"
+],
+a:0
+},
+
+{
+q:"An image is commonly represented as:",
+o:[
+"Pixels",
+"Paragraphs",
+"Tables",
+"Commands"
+],
+a:0
+},
+
+{
+q:"OCR is used to:",
+o:[
+"Extract text from images",
+"Create passwords",
+"Increase internet speed",
+"Format disks"
+],
+a:0
+},
+
+{
+q:"Object detection identifies:",
+o:[
+"Objects in an image",
+"Computer passwords",
+"Database tables",
+"Network cables"
+],
+a:0
+},
+
+{
+q:"Which library is widely used for Computer Vision?",
+o:[
+"OpenCV",
+"HTML",
+"CSS",
+"SQL"
+],
+a:0
+},
+
+{
+q:"Image classification assigns:",
+o:[
+"A class or label to an image",
+"A password to a user",
+"A cable to a computer",
+"A file size"
+],
+a:0
+},
+
+{
+q:"Which neural network is popular for images?",
+o:[
+"CNN",
+"RNN",
+"FTP",
+"SQL"
+],
+a:0
+},
+
+{
+q:"Computer Vision can be used in:",
+o:[
+"Medical image analysis",
+"Keyboard manufacturing only",
+"Battery charging only",
+"File naming only"
+],
+a:0
+},
+
+{
+q:"A digital image consists of:",
+o:[
+"Pixels",
+"Only text",
+"Only sound",
+"Only commands"
+],
+a:0
+}
+
+],
+
+
+/* ================= NLP ================= */
+
+"Natural Language Processing":[
+
+{
+q:"NLP stands for:",
+o:[
+"Natural Language Processing",
+"Network Language Program",
+"Natural Logic Processor",
+"Network Learning Protocol"
+],
+a:0
+},
+
+{
+q:"NLP deals with:",
+o:[
+"Human language",
+"Computer hardware",
+"Power supply",
+"Monitor resolution"
+],
+a:0
+},
+
+{
+q:"Which is an NLP application?",
+o:[
+"Chatbots",
+"USB formatting",
+"Battery charging",
+"Screen cleaning"
+],
+a:0
+},
+
+{
+q:"Sentiment analysis identifies:",
+o:[
+"Emotion or opinion in text",
+"Computer speed",
+"File size",
+"Screen brightness"
+],
+a:0
+},
+
+{
+q:"Speech recognition converts:",
+o:[
+"Speech into text",
+"Text into electricity",
+"Images into cables",
+"Files into hardware"
+],
+a:0
+},
+
+{
+q:"Which is commonly used in NLP?",
+o:[
+"Tokenization",
+"Formatting",
+"Charging",
+"Printing"
+],
+a:0
+},
+
+{
+q:"A token can be:",
+o:[
+"A word or part of a word",
+"A computer cable",
+"A battery",
+"A monitor"
+],
+a:0
+},
+
+{
+q:"Machine translation converts:",
+o:[
+"One language into another",
+"Images into hardware",
+"Files into cables",
+"Code into electricity"
+],
+a:0
+},
+
+{
+q:"Which is an example of NLP?",
+o:[
+"Text classification",
+"Screen repair",
+"Battery replacement",
+"Keyboard cleaning"
+],
+a:0
+},
+
+{
+q:"NLP is closely related to:",
+o:[
+"Artificial Intelligence",
+"Power electronics",
+"Computer assembly",
+"Disk manufacturing"
+],
+a:0
+}
+
+],
+
+
+/* ================= DATA SCIENCE ================= */
+
+"Data Science":[
+
+{
+q:"Data Science mainly focuses on:",
+o:[
+"Extracting useful insights from data",
+"Repairing keyboards",
+"Building monitors",
+"Charging batteries"
+],
+a:0
+},
+
+{
+q:"Which language is widely used in Data Science?",
+o:[
+"Python",
+"HTML",
+"CSS",
+"XML"
+],
+a:0
+},
+
+{
+q:"What is data analysis?",
+o:[
+"Examining data to find useful information",
+"Formatting a computer",
+"Charging a battery",
+"Installing a keyboard"
+],
+a:0
+},
+
+{
+q:"Which library is used for data manipulation in Python?",
+o:[
+"Pandas",
+"HTML",
+"CSS",
+"BIOS"
+],
+a:0
+},
+
+{
+q:"Which library is commonly used for numerical computing?",
+o:[
+"NumPy",
+"HTML",
+"USB",
+"BIOS"
+],
+a:0
+},
+
+{
+q:"Data visualization means:",
+o:[
+"Representing data using charts or graphs",
+"Deleting data",
+"Encrypting passwords",
+"Formatting disks"
+],
+a:0
+},
+
+{
+q:"A dataset is:",
+o:[
+"A collection of data",
+"A computer cable",
+"A processor",
+"A keyboard"
+],
+a:0
+},
+
+{
+q:"Missing values are:",
+o:[
+"Data values that are not available",
+"Extra processors",
+"Network cables",
+"Screen pixels"
+],
+a:0
+},
+
+{
+q:"A bar chart is used for:",
+o:[
+"Comparing categories",
+"Charging devices",
+"Writing code",
+"Installing software"
+],
+a:0
+},
+
+{
+q:"Data Science can be used for:",
+o:[
+"Prediction and decision making",
+"Only printing",
+"Only typing",
+"Only charging"
+],
+a:0
+}
+
+],
+
+
+/* ================= CSE / COMMON ================= */
+
+"C":[
+
+{
+q:"Who developed the C programming language?",
+o:["Dennis Ritchie","James Gosling","Bjarne Stroustrup","Guido van Rossum"],
+a:0
+},
+
+{
+q:"Which symbol is used to end a C statement?",
+o:[";",";",":","#"],
+a:0
+},
+
+{
+q:"Which function is the entry point of a C program?",
+o:["main()","start()","run()","begin()"],
+a:0
+},
+
+{
+q:"Which data type stores an integer?",
+o:["int","float","char","double"],
+a:0
+},
+
+{
+q:"Which operator is used for addition?",
+o:["+","-","*","/"],
+a:0
+},
+
+{
+q:"Which loop executes while a condition is true?",
+o:["while","switch","case","goto"],
+a:0
+},
+
+{
+q:"Which header file is used for printf()?",
+o:["stdio.h","math.h","string.h","stdlib.h"],
+a:0
+},
+
+{
+q:"An array stores:",
+o:["Multiple values of the same type","Only one value","Only characters","Only functions"],
+a:0
+},
+
+{
+q:"Which symbol is used for a single-line comment?",
+o:["//","/*","##","<>"],
+a:0
+},
+
+{
+q:"Which keyword declares a constant?",
+o:["const","constant","fixed","static"],
+a:0
+}
+
+],
+
+
+"Python":[
+
+{
+q:"Which symbol is used for comments in Python?",
+o:["#","//","/*","<>"],
+a:0
+},
+
+{
+q:"Which keyword defines a function?",
+o:["def","function","fun","define"],
+a:0
+},
+
+{
+q:"Which data type stores multiple ordered values?",
+o:["List","Integer","Boolean","Float"],
+a:0
+},
+
+{
+q:"Which function displays output?",
+o:["print()","show()","displayText()","output()"],
+a:0
+},
+
+{
+q:"Python is:",
+o:["High-level programming language","Hardware device","Operating system","Database"],
+a:0
+},
+
+{
+q:"Which symbol is used to create a list?",
+o:["[]","{}","()","<>"],
+a:0
+},
+
+{
+q:"Which keyword is used for a condition?",
+o:["if","when","check","condition"],
+a:0
+},
+
+{
+q:"Which function returns the length of a sequence?",
+o:["len()","size()","length()","count()"],
+a:0
+},
+
+{
+q:"Which type stores True or False?",
+o:["Boolean","Integer","String","Float"],
+a:0
+},
+
+{
+q:"Which keyword is used to import a module?",
+o:["import","include","using","require"],
+a:0
+}
+
+],
+
+
+"Java":[
+
+{
+q:"Java is mainly known as a:",
+o:["Object-oriented programming language","Database","Operating system","Web browser"],
+a:0
+},
+
+{
+q:"Which keyword is used to create a class?",
+o:["class","Class","object","define"],
+a:0
+},
+
+{
+q:"Which method is the starting point of a Java application?",
+o:["main()","start()","run()","begin()"],
+a:0
+},
+
+{
+q:"Which keyword creates an object?",
+o:["new","create","object","make"],
+a:0
+},
+
+{
+q:"Which component executes Java bytecode?",
+o:["JVM","JDK","JRE","JAR"],
+a:0
+},
+
+{
+q:"JDK stands for:",
+o:["Java Development Kit","Java Data Kernel","Java Design Kit","Java Development Kernel"],
+a:0
+},
+
+{
+q:"Which keyword is used for inheritance?",
+o:["extends","inherit","inherits","superclass"],
+a:0
+},
+
+{
+q:"Which keyword refers to the current object?",
+o:["this","self","current","object"],
+a:0
+},
+
+{
+q:"Which concept allows the same method name with different parameters?",
+o:["Method overloading","Inheritance","Encapsulation","Abstraction"],
+a:0
+},
+
+{
+q:"Which concept hides internal implementation details?",
+o:["Abstraction","Compilation","Execution","Looping"],
+a:0
+}
+
+],
+
+
+"Data Structures":[
+
+{
+q:"A stack follows which principle?",
+o:["LIFO","FIFO","FILO only","Random order"],
+a:0
+},
+
+{
+q:"A queue follows which principle?",
+o:["FIFO","LIFO","Random order","Reverse order"],
+a:0
+},
+
+{
+q:"Which data structure uses nodes and links?",
+o:["Linked List","Array","Integer","String"],
+a:0
+},
+
+{
+q:"Which tree has at most two children per node?",
+o:["Binary Tree","General Tree","Graph","Heap only"],
+a:0
+},
+
+{
+q:"Which data structure is used in recursion?",
+o:["Stack","Queue","Array","Graph"],
+a:0
+},
+
+{
+q:"An array generally stores elements in:",
+o:["Contiguous memory locations","Random files","Separate computers","Network packets"],
+a:0
+},
+
+{
+q:"Which structure represents relationships between vertices?",
+o:["Graph","Stack","Queue","Array"],
+a:0
+},
+
+{
+q:"BST stands for:",
+o:["Binary Search Tree","Basic Search Table","Binary Stack Tree","Balanced Search Table"],
+a:0
+},
+
+{
+q:"Which operation adds an element to a stack?",
+o:["Push","Pop","Delete","Remove"],
+a:0
+},
+
+{
+q:"Which operation removes the top stack element?",
+o:["Pop","Push","Insert","Append"],
+a:0
+}
+
+],
+
+
+"DBMS":[
+
+{
+q:"DBMS stands for:",
+o:["Database Management System","Data Backup Management System","Database Machine System","Data Management Service"],
+a:0
+},
+
+{
+q:"Which language is commonly used to query relational databases?",
+o:["SQL","HTML","CSS","JavaScript"],
+a:0
+},
+
+{
+q:"A primary key:",
+o:["Uniquely identifies a record","Stores only images","Deletes a table","Creates a network"],
+a:0
+},
+
+{
+q:"A table consists of:",
+o:["Rows and columns","Only rows","Only columns","Only files"],
+a:0
+},
+
+{
+q:"Which command retrieves data?",
+o:["SELECT","DELETE","DROP","UPDATE"],
+a:0
+},
+
+{
+q:"Which command adds new records?",
+o:["INSERT","SELECT","DROP","DELETE"],
+a:0
+},
+
+{
+q:"Which command modifies existing records?",
+o:["UPDATE","INSERT","SELECT","CREATE"],
+a:0
+},
+
+{
+q:"Which command removes records?",
+o:["DELETE","SELECT","INSERT","ALTER"],
+a:0
+},
+
+{
+q:"A foreign key is used to:",
+o:["Create a relationship between tables","Delete databases","Store images","Create passwords"],
+a:0
+},
+
+{
+q:"Normalization helps to:",
+o:["Reduce data redundancy","Increase duplicate data","Delete all records","Increase screen size"],
+a:0
+}
+
+],
+
+
+"Operating Systems":[
+
+{
+q:"An operating system manages:",
+o:["Computer hardware and software resources","Only keyboards","Only websites","Only images"],
+a:0
+},
+
+{
+q:"Which is an operating system?",
+o:["Linux","Python","HTML","MySQL"],
+a:0
+},
+
+{
+q:"A process is:",
+o:["A program in execution","A stored image","A keyboard key","A network cable"],
+a:0
+},
+
+{
+q:"CPU scheduling decides:",
+o:["Which process gets CPU time","Which file gets deleted","Which monitor is used","Which keyboard is connected"],
+a:0
+},
+
+{
+q:"Which scheduling algorithm uses a time quantum?",
+o:["Round Robin","FCFS","SJF","Priority only"],
+a:0
+},
+
+{
+q:"FCFS stands for:",
+o:["First Come First Served","Fast CPU First Service","First Computer File System","File Control First Service"],
+a:0
+},
+
+{
+q:"Deadlock involves:",
+o:["Processes waiting for resources","Only file creation","Only printing","Only networking"],
+a:0
+},
+
+{
+q:"Memory management handles:",
+o:["Allocation of memory to processes","Keyboard input only","Screen brightness","Network cables"],
+a:0
+},
+
+{
+q:"Which manages files and folders?",
+o:["Operating System","Compiler only","Keyboard","Monitor"],
+a:0
+},
+
+{
+q:"Linux is:",
+o:["An operating system","A programming language","A database table","A browser"],
+a:0
+}
+
+],
+
+
+"Computer Networks":[
+
+{
+q:"A computer network connects:",
+o:["Computers and devices to communicate","Only printers","Only keyboards","Only batteries"],
+a:0
+},
+
+{
+q:"What does LAN stand for?",
+o:["Local Area Network","Large Area Network","Long Access Network","Local Access Node"],
+a:0
+},
+
+{
+q:"Which device forwards packets between networks?",
+o:["Router","Keyboard","Monitor","Printer"],
+a:0
+},
+
+{
+q:"IP address identifies:",
+o:["A device on a network","A keyboard key","A file","A monitor"],
+a:0
+},
+
+{
+q:"HTTP is used for:",
+o:["Web communication","File compression","Battery charging","Screen control"],
+a:0
+},
+
+{
+q:"Which protocol is commonly used to send email?",
+o:["SMTP","HTTP","FTP","HTML"],
+a:0
+},
+
+{
+q:"DNS converts:",
+o:["Domain names to IP addresses","Images to text","Files to folders","Passwords to usernames"],
+a:0
+},
+
+{
+q:"Which device connects devices within a LAN?",
+o:["Switch","Monitor","Keyboard","Scanner"],
+a:0
+},
+
+{
+q:"TCP is a:",
+o:["Transport layer protocol","Programming language","Database","Hardware device"],
+a:0
+},
+
+{
+q:"The Internet is:",
+o:["A global network of interconnected networks","A single computer","A database only","A programming language"],
+a:0
+}
+
+],
+
+
+/* ================= ECE ================= */
+
+"Digital Electronics":[
+
+{
+q:"Digital electronics mainly uses:",
+o:["Binary values","Only decimal values","Only analog waves","Only text"],
+a:0
+},
+
+{
+q:"How many values does a binary digit have?",
+o:["2","4","8","10"],
+a:0
+},
+
+{
+q:"Which gate gives HIGH only when both inputs are HIGH?",
+o:["AND","OR","NOT","XOR"],
+a:0
+},
+
+{
+q:"Which gate reverses the input?",
+o:["NOT","AND","OR","XOR"],
+a:0
+},
+
+{
+q:"A flip-flop stores:",
+o:["One bit of information","One byte only","One file","One program"],
+a:0
+},
+
+{
+q:"Which is a universal logic gate?",
+o:["NAND","AND","XOR","NOT"],
+a:0
+},
+
+{
+q:"A multiplexer selects:",
+o:["One input from multiple inputs","All outputs","Only one memory cell","One processor"],
+a:0
+},
+
+{
+q:"A decoder converts:",
+o:["Binary information into selected outputs","Text into images","Images into sound","Files into folders"],
+a:0
+},
+
+{
+q:"Boolean algebra is used in:",
+o:["Digital logic design","Web development","Database management","File storage"],
+a:0
+},
+
+{
+q:"K-map is used for:",
+o:["Boolean expression simplification","Network routing","Database queries","File compression"],
+a:0
+}
+
+],
+
+
+"Embedded Systems":[
+
+{
+q:"An embedded system is:",
+o:["A computer system designed for a specific function","A web browser","A database","A text editor"],
+a:0
+},
+
+{
+q:"Which is an example of an embedded system?",
+o:["Washing machine controller","Social media website","Word document","Web browser"],
+a:0
+},
+
+{
+q:"A microcontroller is commonly used in:",
+o:["Embedded systems","Only databases","Only websites","Only printers"],
+a:0
+},
+
+{
+q:"Embedded systems often have:",
+o:["Specific tasks","Unlimited tasks","No hardware","No software"],
+a:0
+},
+
+{
+q:"Which is commonly found in a microcontroller?",
+o:["CPU, memory and peripherals","Only CPU","Only display","Only keyboard"],
+a:0
+},
+
+{
+q:"Real-time systems require:",
+o:["Timely responses","Only large storage","Only graphics","No processor"],
+a:0
+},
+
+{
+q:"Arduino is commonly used for:",
+o:["Embedded and electronics projects","Database management","Web hosting","Text editing"],
+a:0
+},
+
+{
+q:"Sensors are used to:",
+o:["Collect information from the environment","Store websites","Compile code","Create passwords"],
+a:0
+},
+
+{
+q:"An actuator:",
+o:["Performs an action based on a control signal","Only stores data","Only displays text","Only reads files"],
+a:0
+},
+
+{
+q:"Embedded systems combine:",
+o:["Hardware and software","Only software","Only databases","Only networks"],
+a:0
+}
+
+],
+
+
+"Microprocessors":[
+
+{
+q:"A microprocessor is mainly:",
+o:["A CPU on a chip","A database","A network cable","A monitor"],
+a:0
+},
+
+{
+q:"CPU stands for:",
+o:["Central Processing Unit","Computer Program Unit","Central Power Unit","Computer Processing Utility"],
+a:0
+},
+
+{
+q:"The ALU performs:",
+o:["Arithmetic and logical operations","File storage","Network routing","Screen display"],
+a:0
+},
+
+{
+q:"Registers are:",
+o:["Small high-speed storage locations","External hard disks","Network cables","Displays"],
+a:0
+},
+
+{
+q:"The control unit:",
+o:["Controls execution of instructions","Stores movies","Prints documents","Connects Wi-Fi"],
+a:0
+},
+
+{
+q:"Instruction execution generally involves:",
+o:["Fetch, decode and execute","Print, scan and save","Open, close and delete","Read, write and charge"],
+a:0
+},
+
+{
+q:"Which stores temporary data during processing?",
+o:["Register","Printer","Monitor","Keyboard"],
+a:0
+},
+
+{
+q:"The clock provides:",
+o:["Timing signals","Internet access","Storage","Images"],
+a:0
+},
+
+{
+q:"A microprocessor executes:",
+o:["Machine instructions","Only HTML","Only SQL","Only images"],
+a:0
+},
+
+{
+q:"Memory is used to:",
+o:["Store data and instructions","Display sound","Connect keyboards","Charge batteries"],
+a:0
+}
+
+],
+
+
+"VLSI":[
+
+{
+q:"VLSI stands for:",
+o:["Very Large Scale Integration","Very Low System Integration","Virtual Large Software Interface","Variable Logic System Integration"],
+a:0
+},
+
+{
+q:"VLSI deals with:",
+o:["Integrating many transistors on a chip","Only software development","Only networking","Only databases"],
+a:0
+},
+
+{
+q:"An IC stands for:",
+o:["Integrated Circuit","Internet Connection","Input Controller","Internal Computer"],
+a:0
+},
+
+{
+q:"Transistors are important components of:",
+o:["Integrated circuits","HTML pages","Databases","Networks"],
+a:0
+},
+
+{
+q:"VLSI is used in:",
+o:["Modern processors and electronic devices","Only keyboards","Only printers","Only websites"],
+a:0
+},
+
+{
+q:"A semiconductor commonly used in ICs is:",
+o:["Silicon","Wood","Glass","Paper"],
+a:0
+},
+
+{
+q:"Chip design involves:",
+o:["Designing electronic circuits on a chip","Writing documents","Managing websites","Formatting disks"],
+a:0
+},
+
+{
+q:"ASIC stands for:",
+o:["Application Specific Integrated Circuit","Advanced Software Integrated Computer","Automatic System Input Circuit","Application System Internal Controller"],
+a:0
+},
+
+{
+q:"VLSI technology helps create:",
+o:["Compact electronic systems","Only software files","Only networks","Only databases"],
+a:0
+},
+
+{
+q:"Transistor size reduction generally helps:",
+o:["Increase integration density","Remove all memory","Stop computation","Remove processors"],
+a:0
+}
+
+],
+
+
+"Communication Systems":[
+
+{
+q:"Communication system transfers:",
+o:["Information from one point to another","Only electricity","Only files","Only programs"],
+a:0
+},
+
+{
+q:"A transmitter:",
+o:["Sends the signal","Receives the signal","Stores the signal","Deletes the signal"],
+a:0
+},
+
+{
+q:"A receiver:",
+o:["Receives the transmitted signal","Creates passwords","Stores files","Formats disks"],
+a:0
+},
+
+{
+q:"A communication channel carries:",
+o:["Signals","Only programs","Only databases","Only images"],
+a:0
+},
+
+{
+q:"Modulation is used to:",
+o:["Modify a carrier signal according to information","Delete signals","Store files","Format memory"],
+a:0
+},
+
+{
+q:"AM stands for:",
+o:["Amplitude Modulation","Audio Memory","Automatic Modulation","Analog Memory"],
+a:0
+},
+
+{
+q:"FM stands for:",
+o:["Frequency Modulation","File Management","Fast Memory","Frequency Memory"],
+a:0
+},
+
+{
+q:"Noise is:",
+o:["Unwanted signal disturbance","Useful information","A processor","A database"],
+a:0
+},
+
+{
+q:"Antennas are used to:",
+o:["Transmit or receive electromagnetic waves","Store programs","Compile code","Manage databases"],
+a:0
+},
+
+{
+q:"Wireless communication uses:",
+o:["Electromagnetic waves","Only USB cables","Only paper","Only keyboards"],
+a:0
+}
+
+],
+
+
+"Internet of Things":[
+
+{
+q:"IoT stands for:",
+o:["Internet of Things","Internet of Technology","Input of Things","Integrated Online Technology"],
+a:0
+},
+
+{
+q:"IoT connects:",
+o:["Physical devices to networks","Only websites","Only databases","Only computers"],
+a:0
+},
+
+{
+q:"A smart thermostat is an example of:",
+o:["IoT","DBMS","Operating System","Compiler"],
+a:0
+},
+
+{
+q:"IoT devices commonly use:",
+o:["Sensors","Only printers","Only keyboards","Only monitors"],
+a:0
+},
+
+{
+q:"Sensors collect:",
+o:["Data from the environment","Passwords","Programs","Web pages"],
+a:0
+},
+
+{
+q:"IoT data can be processed using:",
+o:["Cloud computing","Only keyboards","Only monitors","Only printers"],
+a:0
+},
+
+{
+q:"Smart homes are an application of:",
+o:["IoT","DBMS only","HTML only","C compiler"],
+a:0
+},
+
+{
+q:"IoT devices communicate using:",
+o:["Networks","Only paper","Only batteries","Only screens"],
+a:0
+},
+
+{
+q:"An actuator can:",
+o:["Perform a physical action","Only store data","Only read text","Only display websites"],
+a:0
+},
+
+{
+q:"IoT combines devices, sensors and:",
+o:["Connectivity","Only keyboards","Only printers","Only monitors"],
+a:0
+}
+
+]
+
+};
+
+
+/* =====================================================
+   ADD COMMON ALIASES
+====================================================== */
+
+questionBank["Data Analytics"] =
+questionBank["Data Science"];
+
+questionBank["Statistics"] =
+questionBank["Data Science"];
+
+questionBank["Data Visualization"] =
+questionBank["Data Science"];
+
+questionBank["Big Data"] =
+questionBank["Data Science"];
+
+questionBank["Algorithms"] =
+questionBank["Data Structures"];
+
+questionBank["Software Engineering"] =
+questionBank["Data Structures"];
+
+questionBank["Web Development"] =
+questionBank["Computer Networks"];
+
+questionBank["Cloud Computing"] =
+questionBank["Computer Networks"];
+
+questionBank["Cyber Security"] =
+questionBank["Computer Networks"];
+
+questionBank["Networking"] =
+questionBank["Computer Networks"];
+
+questionBank["Business Analytics"] =
+questionBank["Data Science"];
+
+questionBank["Business Intelligence"] =
+questionBank["Data Science"];
+
+
+/* =====================================================
+   CHECK TOPIC
+====================================================== */
+
+if(!selectedTopic){
+
+    alert(
+        "No quiz topic selected."
+    );
+
+    window.location.href =
+        "home.html";
+
+}
+
+
+/* =====================================================
+   GET QUESTIONS
+====================================================== */
+
+let availableQuestions =
+    questionBank[selectedTopic];
+
+
+/*
+If a topic is not available,
+use general questions instead.
+*/
+
+if(!availableQuestions){
+
+    availableQuestions =
+        questionBank["Data Science"];
+
+}
+
+
+/* =====================================================
+   SHUFFLE
+====================================================== */
+
+function shuffle(array){
+
+    let arr =
+        [...array];
+
+    for(
+        let i = arr.length - 1;
+        i > 0;
+        i--
+    ){
+
+        let j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
+
+        [
+            arr[i],
+            arr[j]
+        ] =
+        [
+            arr[j],
+            arr[i]
+        ];
+
+    }
+
+    return arr;
+
+}
+
+
+/* =====================================================
+   PREPARE QUESTIONS
+====================================================== */
+
+let questions =
+    shuffle(
+        availableQuestions
+    );
+
+
+/*
+Current question bank has 10
+questions per topic.
+
+Therefore never ask for more
+than the available number.
+*/
+
+questionCount =
+    Math.min(
+        questionCount,
+        questions.length
+    );
+
+
+questions =
+    questions.slice(
+        0,
+        questionCount
+    );
+
+
+/* =====================================================
+   QUIZ VARIABLES
+====================================================== */
+
+let currentQuestion = 0;
+
+let score = 0;
+
+let userAnswers = [];
+
+let selectedAnswer = null;
+
+
+/* =====================================================
+   SHOW TOPIC
+====================================================== */
+
+document.getElementById(
+    "topicName"
+).innerText =
+    selectedTopic || "Technical Quiz";
+
+
+/* =====================================================
+   LOAD QUESTION
+====================================================== */
+
+function loadQuestion(){
+
+    selectedAnswer = null;
+
+
+    const question =
+        questions[
+            currentQuestion
+        ];
+
+
+    document.getElementById(
+        "questionNumber"
+    ).innerText =
+        "Question " +
+        (currentQuestion + 1);
+
+
+    document.getElementById(
+        "progressText"
+    ).innerText =
+        "Question " +
+        (currentQuestion + 1) +
+        " / " +
+        questionCount;
+
+
+    document.getElementById(
+        "questionText"
+    ).innerText =
+        question.q;
+
+
+    document.getElementById(
+        "progressFill"
+    ).style.width =
+        (
+            (
+                currentQuestion + 1
+            )
+            /
+            questionCount
+            *
+            100
+        ) + "%";
+
+
+    const container =
+        document.getElementById(
+            "optionsContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    question.o.forEach(
+        function(option,index){
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "option";
+
+
+            button.innerText =
+                option;
+
+
+            button.onclick =
+                function(){
+
+                    selectAnswer(
+                        index,
+                        button
+                    );
+
+                };
+
+
+            container.appendChild(
+                button
+            );
+
+        }
+    );
+
+
+    document.getElementById(
+        "nextButton"
+    ).disabled =
+        true;
+
+
+    if(
+        currentQuestion ===
+        questionCount - 1
+    ){
+
+        document.getElementById(
+            "nextButton"
+        ).innerText =
+            "Finish Quiz ✓";
+
+    }
+    else{
+
+        document.getElementById(
+            "nextButton"
+        ).innerText =
+            "Next Question →";
+
+    }
+
+}
+
+
+/* =====================================================
+   SELECT ANSWER
+====================================================== */
+
+function selectAnswer(
+    index,
+    button
+){
+
+    selectedAnswer =
+        index;
+
+
+    /*
+    IMPORTANT:
+    No green/red answer feedback.
+    Only selected option gets
+    a small blue highlight.
+    */
+
+
+    const buttons =
+        document.querySelectorAll(
+            ".option"
+        );
+
+
+    buttons.forEach(
+        function(btn){
+
+            btn.classList.remove(
+                "selected"
+            );
+
+        }
+    );
+
+
+    button.classList.add(
+        "selected"
+    );
+
+
+    document.getElementById(
+        "nextButton"
+    ).disabled =
+        false;
+
+}
+
+
+/* =====================================================
+   NEXT QUESTION
+====================================================== */
+
+function nextQuestion(){
+
+    if(
+        selectedAnswer === null
+    ){
+
+        return;
+
+    }
+
+
+    const question =
+        questions[
+            currentQuestion
+        ];
+
+
+    userAnswers.push({
+
+        question:
+            question.q,
+
+        selected:
+            question.o[
+                selectedAnswer
+            ],
+
+        correct:
+            question.o[
+                question.a
+            ],
+
+        isCorrect:
+            selectedAnswer ===
+            question.a
+
+    });
+
+
+    if(
+        selectedAnswer ===
+        question.a
+    ){
+
+        score++;
+
+    }
+
+
+    currentQuestion++;
+
+
+    if(
+        currentQuestion <
+        questionCount
+    ){
+
+        loadQuestion();
+
+    }
+    else{
+
+        showResult();
+
+    }
+
+}
+
+
+/* =====================================================
+   SHOW RESULT
+====================================================== */
+
+function showResult(){
+
+    document.getElementById(
+        "quizScreen"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "resultScreen"
+    ).style.display =
+        "block";
+
+
+    const wrong =
+        questionCount - score;
+
+
+    const percentage =
+        Math.round(
+            (
+                score /
+                questionCount
+            ) * 100
+        );
+
+
+    document.getElementById(
+        "resultTopic"
+    ).innerText =
+        selectedTopic;
+
+
+    document.getElementById(
+        "finalScore"
+    ).innerText =
+        score +
+        "/" +
+        questionCount;
+
+
+    document.getElementById(
+        "correctCount"
+    ).innerText =
+        score;
+
+
+    document.getElementById(
+        "wrongCount"
+    ).innerText =
+        wrong;
+
+
+    document.getElementById(
+        "percentage"
+    ).innerText =
+        percentage +
+        "%";
+
+
+    /*
+    SAVE SCORE
+    */
+
+    saveQuizResult(
+        score,
+        questionCount,
+        percentage
+    );
+
+}
+
+
+/* =====================================================
+   PREVIEW WRONG ANSWERS
+====================================================== */
+
+function showWrongAnswers(){
+
+    const wrongAnswers =
+        userAnswers.filter(
+            function(item){
+
+                return !item.isCorrect;
+
+            }
+        );
+
+
+    const screen =
+        document.getElementById(
+            "wrongScreen"
+        );
+
+
+    const container =
+        document.getElementById(
+            "wrongContainer"
+        );
+
+
+    screen.style.display =
+        "block";
+
+
+    container.innerHTML = "";
+
+
+    if(
+        wrongAnswers.length === 0
+    ){
+
+        container.innerHTML = `
+
+            <div class="no-wrong">
+
+                <h2>
+                    🎉 Perfect Score!
+                </h2>
+
+                <p style="margin-top:10px;color:#cbd5e1">
+
+                    You didn't get any question wrong.
+
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    wrongAnswers.forEach(
+        function(item,index){
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "wrong-card";
+
+
+            card.innerHTML = `
+
+                <div class="wrong-question">
+
+                    ${index + 1}.
+                    ${escapeHTML(
+                        item.question
+                    )}
+
+                </div>
+
+                <div class="your-answer">
+
+                    ❌ Your Answer:
+                    <strong>
+                        ${escapeHTML(
+                            item.selected
+                        )}
+                    </strong>
+
+                </div>
+
+                <div class="correct-answer">
+
+                    ✅ Correct Answer:
+                    <strong>
+                        ${escapeHTML(
+                            item.correct
+                        )}
+                    </strong>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SAFE TEXT
+====================================================== */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   SAVE QUIZ RESULT
+====================================================== */
+
+function saveQuizResult(
+    score,
+    total,
+    percentage
+){
+
+    const currentUser =
+        JSON.parse(
+            localStorage.getItem(
+                "currentUser"
+            )
+        );
+
+
+    if(!currentUser){
+
+        return;
+
+    }
+
+
+    const username =
+        currentUser.username;
+
+
+    const key =
+        "quizResults_" +
+        username;
+
+
+    let results =
+        JSON.parse(
+            localStorage.getItem(key)
+        ) || [];
+
+
+    results.push({
+
+        topic:
+            selectedTopic,
+
+        score:
+            score,
+
+        total:
+            total,
+
+        percentage:
+            percentage,
+
+        date:
+            new Date()
+                .toLocaleString()
+
+    });
+
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(results)
+    );
+
+}
+
+
+/* =====================================================
+   GO HOME
+====================================================== */
+
+function goHome(){
+
+    window.location.href =
+        "home.html";
+
+}
+
+
+/* =====================================================
+   START
+====================================================== */
+
+loadQuestion();
+
+</script>
+
+</body>
+
+</html>

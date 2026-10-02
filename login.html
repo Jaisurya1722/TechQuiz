@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TechQuiz - Login</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:linear-gradient(135deg,#0f172a,#172554,#312e81);
+    color:white;
+}
+
+.container{
+    width:100%;
+    max-width:430px;
+    padding:35px 30px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:25px;
+}
+
+.icon{
+    text-align:center;
+    font-size:55px;
+}
+
+h1{
+    text-align:center;
+    margin:10px 0;
+}
+
+h1 span{
+    color:#38bdf8;
+}
+
+.subtitle{
+    text-align:center;
+    color:#cbd5e1;
+    margin-bottom:25px;
+}
+
+label{
+    display:block;
+    margin:18px 0 7px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #475569;
+    border-radius:12px;
+    background:rgba(255,255,255,0.08);
+    color:white;
+    outline:none;
+}
+
+.login-btn{
+    width:100%;
+    padding:14px;
+    margin-top:25px;
+    border:none;
+    border-radius:25px;
+    background:#38bdf8;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.signup-text{
+    text-align:center;
+    margin-top:22px;
+    color:#cbd5e1;
+}
+
+.signup-text a{
+    color:#38bdf8;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="icon">🔐</div>
+
+<h1>Welcome <span>Back!</span></h1>
+
+<p class="subtitle">Login to continue 🚀</p>
+
+<form onsubmit="login(event)">
+
+<label>🔑 Username</label>
+
+<input
+type="text"
+id="username"
+placeholder="Enter your username"
+required
+>
+
+<label>🔒 Password</label>
+
+<input
+type="password"
+id="password"
+placeholder="Enter your password"
+required
+>
+
+<button class="login-btn" type="submit">
+🚀 Login
+</button>
+
+</form>
+
+<p class="signup-text">
+
+Don't have an account?
+
+<a href="signup.html">
+Create Account
+</a>
+
+</p>
+
+</div>
+
+<script>
+
+function login(event){
+
+    event.preventDefault();
+
+
+    const username =
+        document.getElementById("username")
+        .value
+        .trim();
+
+    const password =
+        document.getElementById("password")
+        .value;
+
+
+    const users =
+        JSON.parse(
+            localStorage.getItem("quizUsers")
+        ) || [];
+
+
+    const foundUser =
+        users.find(function(user){
+
+            return (
+                String(user.username)
+                    .trim()
+                    .toLowerCase()
+                ===
+                username.toLowerCase()
+
+                &&
+
+                String(user.password)
+                ===
+                password
+            );
+
+        });
+
+
+    if(!foundUser){
+
+        alert(
+            "❌ User not found or password is incorrect."
+        );
+
+        return;
+
+    }
+
+
+    /* SAVE LOGGED-IN USER */
+
+    localStorage.setItem(
+        "currentUser",
+        JSON.stringify(foundUser)
+    );
+
+
+    localStorage.setItem(
+        "loggedIn",
+        "true"
+    );
+
+
+    /* CLEAR OLD QUIZ DATA */
+
+    localStorage.removeItem("selectedTopic");
+
+    localStorage.removeItem("questionCount");
+
+
+    alert("🎉 Login successful!");
+
+
+    window.location.href = "home.html";
+
+}
+
+</script>
+
+</body>
+</html>

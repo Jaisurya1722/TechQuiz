@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TechQuiz - Admin Dashboard</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#312e81);
+    color:white;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+}
+
+
+/* HEADER */
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#38bdf8;
+}
+
+.logout{
+    padding:10px 18px;
+    border:1px solid #38bdf8;
+    border-radius:20px;
+    background:transparent;
+    color:white;
+    cursor:pointer;
+}
+
+
+/* WELCOME */
+
+.welcome{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:22px;
+    padding:25px;
+    margin-bottom:25px;
+}
+
+.welcome h1{
+    margin-bottom:8px;
+}
+
+.welcome p{
+    color:#94a3b8;
+}
+
+
+/* STATISTICS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:30px;
+}
+
+.stat{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:18px;
+    padding:20px;
+    text-align:center;
+}
+
+.stat-icon{
+    font-size:30px;
+}
+
+.stat-number{
+    font-size:28px;
+    font-weight:bold;
+    color:#38bdf8;
+    margin:8px 0;
+}
+
+.stat-label{
+    color:#94a3b8;
+    font-size:13px;
+}
+
+
+/* SEARCH */
+
+.section-title{
+    margin-bottom:15px;
+}
+
+.search{
+    width:100%;
+    padding:14px;
+    margin-bottom:20px;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    background:#1e293b;
+    color:white;
+    font-size:15px;
+}
+
+
+/* TABLE */
+
+.table-box{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:20px;
+    padding:20px;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:900px;
+}
+
+th{
+    padding:14px;
+    text-align:left;
+    background:rgba(56,189,248,0.15);
+    color:#38bdf8;
+}
+
+td{
+    padding:14px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+tr:hover{
+    background:rgba(255,255,255,0.05);
+}
+
+.badge{
+    padding:5px 10px;
+    border-radius:15px;
+    background:rgba(56,189,248,0.15);
+    color:#38bdf8;
+    font-size:12px;
+}
+
+.score{
+    color:#86efac;
+    font-weight:bold;
+}
+
+.empty{
+    text-align:center;
+    padding:40px;
+    color:#94a3b8;
+}
+
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+<header>
+
+<div class="logo">
+
+🛡️ Tech<span>Quiz Admin</span>
+
+</div>
+
+
+<button
+class="logout"
+onclick="adminLogout()">
+
+Logout
+
+</button>
+
+</header>
+
+
+<div class="welcome">
+
+<h1>
+👋 Admin Dashboard
+</h1>
+
+<p>
+Monitor users, quiz attempts and performance.
+</p>
+
+</div>
+
+
+<!-- STATISTICS -->
+
+<div class="stats">
+
+
+<div class="stat">
+
+<div class="stat-icon">
+👥
+</div>
+
+<div
+class="stat-number"
+id="totalUsers">
+0
+</div>
+
+<div class="stat-label">
+Registered Users
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">
+🧠
+</div>
+
+<div
+class="stat-number"
+id="totalQuizzes">
+0
+</div>
+
+<div class="stat-label">
+Quizzes Completed
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">
+🏆
+</div>
+
+<div
+class="stat-number"
+id="bestScore">
+0%
+</div>
+
+<div class="stat-label">
+Highest Score
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">
+⭐
+</div>
+
+<div
+class="stat-number"
+id="totalPoints">
+0
+</div>
+
+<div class="stat-label">
+Total Points
+</div>
+
+</div>
+
+</div>
+
+
+<h2 class="section-title">
+👥 Registered Users
+</h2>
+
+
+<input
+    type="text"
+    class="search"
+    id="search"
+    placeholder="🔎 Search user..."
+    oninput="displayUsers()"
+>
+
+
+<div class="table-box">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+<th>Username</th>
+<th>Education</th>
+<th>Department</th>
+<th>Quizzes</th>
+<th>Best Score</th>
+<th>Points</th>
+<th>Last Login</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="userTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/* ======================================
+   ADMIN SECURITY
+====================================== */
+
+if(
+    localStorage.getItem(
+        "adminLoggedIn"
+    ) !== "true"
+){
+
+    window.location.href =
+        "admin-login.html";
+
+}
+
+
+/* ======================================
+   GET USERS
+====================================== */
+
+function getUsers(){
+
+    return JSON.parse(
+        localStorage.getItem(
+            "users"
+        )
+    ) || [];
+
+}
+
+
+/* ======================================
+   GET USER QUIZ DATA
+====================================== */
+
+function getQuizData(username){
+
+    const key =
+        "quizResults_" +
+        username;
+
+
+    const results =
+        JSON.parse(
+            localStorage.getItem(
+                key
+            )
+        ) || [];
+
+
+    let bestScore = 0;
+
+    let points = 0;
+
+
+    results.forEach(
+        function(result){
+
+            const percentage =
+                Number(
+                    result.percentage
+                ) || 0;
+
+
+            if(
+                percentage >
+                bestScore
+            ){
+
+                bestScore =
+                    percentage;
+
+            }
+
+
+            points +=
+                Number(
+                    result.score
+                ) || 0;
+
+        }
+    );
+
+
+    return {
+
+        quizzes:
+            results.length,
+
+        bestScore:
+            bestScore,
+
+        points:
+            points
+
+    };
+
+}
+
+
+/* ======================================
+   DISPLAY USERS
+====================================== */
+
+function displayUsers(){
+
+    const users =
+        getUsers();
+
+
+    const search =
+        document.getElementById(
+            "search"
+        )
+        .value
+        .toLowerCase();
+
+
+    const table =
+        document.getElementById(
+            "userTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    let totalQuizzes = 0;
+
+    let totalPoints = 0;
+
+    let highestScore = 0;
+
+
+    users.forEach(
+        function(user){
+
+            const name =
+                user.name || "Student";
+
+            const username =
+                user.username || "-";
+
+            const education =
+                user.education || "College";
+
+            const department =
+                user.department || "-";
+
+
+            const text =
+                (
+                    name +
+                    " " +
+                    username +
+                    " " +
+                    department
+                )
+                .toLowerCase();
+
+
+            if(
+                search &&
+                !text.includes(search)
+            ){
+
+                return;
+
+            }
+
+
+            const data =
+                getQuizData(
+                    username
+                );
+
+
+            totalQuizzes +=
+                data.quizzes;
+
+
+            totalPoints +=
+                data.points;
+
+
+            if(
+                data.bestScore >
+                highestScore
+            ){
+
+                highestScore =
+                    data.bestScore;
+
+            }
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${escapeHTML(name)}
+                </td>
+
+                <td>
+                    ${escapeHTML(username)}
+                </td>
+
+                <td>
+                    ${escapeHTML(education)}
+                </td>
+
+                <td>
+
+                    <span class="badge">
+
+                        ${escapeHTML(
+                            department
+                        )}
+
+                    </span>
+
+                </td>
+
+                <td>
+                    ${data.quizzes}
+                </td>
+
+                <td class="score">
+                    ${data.bestScore}%
+                </td>
+
+                <td>
+                    ${data.points}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        user.lastLogin ||
+                        "Not available"
+                    )}
+                </td>
+
+            `;
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    if(
+        table.children.length === 0
+    ){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="empty">
+
+                    No users found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    /* UPDATE DASHBOARD */
+
+    document.getElementById(
+        "totalUsers"
+    ).innerText =
+        users.length;
+
+
+    document.getElementById(
+        "totalQuizzes"
+    ).innerText =
+        totalQuizzes;
+
+
+    document.getElementById(
+        "bestScore"
+    ).innerText =
+        highestScore + "%";
+
+
+    document.getElementById(
+        "totalPoints"
+    ).innerText =
+        totalPoints;
+
+}
+
+
+/* ======================================
+   SAFE TEXT
+====================================== */
+
+function escapeHTML(text){
+
+    return String(text)
+
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* ======================================
+   ADMIN LOGOUT
+====================================== */
+
+function adminLogout(){
+
+    localStorage.removeItem(
+        "adminLoggedIn"
+    );
+
+
+    window.location.href =
+        "admin-login.html";
+
+}
+
+
+/* ======================================
+   START
+====================================== */
+
+displayUsers();
+
+</script>
+
+</body>
+
+</html>

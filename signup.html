@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account - TechQuiz</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:linear-gradient(135deg,#0f172a,#172554,#312e81);
+    color:white;
+}
+
+.container{
+    width:100%;
+    max-width:450px;
+    background:rgba(255,255,255,0.08);
+    padding:30px;
+    border-radius:25px;
+    border:1px solid rgba(255,255,255,0.15);
+}
+
+.icon{
+    text-align:center;
+    font-size:55px;
+}
+
+h1{
+    text-align:center;
+    margin:10px 0;
+}
+
+h1 span{
+    color:#38bdf8;
+}
+
+.subtitle{
+    text-align:center;
+    color:#cbd5e1;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    margin:15px 0 7px;
+}
+
+input,select{
+    width:100%;
+    padding:13px;
+    border:1px solid #475569;
+    border-radius:12px;
+    background:rgba(255,255,255,0.08);
+    color:white;
+    outline:none;
+}
+
+select option{
+    color:black;
+}
+
+.create-btn{
+    width:100%;
+    margin-top:25px;
+    padding:14px;
+    border:none;
+    border-radius:25px;
+    background:#38bdf8;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.login-text{
+    text-align:center;
+    margin-top:20px;
+    color:#cbd5e1;
+}
+
+.login-text a{
+    color:#38bdf8;
+    text-decoration:none;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="icon">🧠</div>
+
+<h1>
+Welcome to <span>TechQuiz</span>
+</h1>
+
+<p class="subtitle">
+Create your account 🚀
+</p>
+
+<form onsubmit="createAccount(event)">
+
+<label>👤 Full Name</label>
+
+<input
+type="text"
+id="name"
+placeholder="Enter your full name"
+required
+>
+
+<label>🔑 Username</label>
+
+<input
+type="text"
+id="username"
+placeholder="Create a username"
+required
+>
+
+<label>🔒 Password</label>
+
+<input
+type="password"
+id="password"
+placeholder="Create a password"
+required
+>
+
+<label>🎓 Education</label>
+
+<select id="education" required>
+
+<option value="">
+Select
+</option>
+
+<option value="College">
+🎓 College
+</option>
+
+</select>
+
+<label>📚 Department</label>
+
+<select id="department" required>
+
+<option value="">
+Select your department
+</option>
+
+<option value="AIML">
+AIML - Artificial Intelligence & Machine Learning
+</option>
+
+<option value="AIDS">
+AIDS - Artificial Intelligence & Data Science
+</option>
+
+<option value="CSE">
+CSE - Computer Science & Engineering
+</option>
+
+<option value="ECE">
+ECE - Electronics & Communication Engineering
+</option>
+
+<option value="CSBS">
+CSBS - Computer Science & Business Systems
+</option>
+
+<option value="IT">
+IT - Information Technology
+</option>
+
+</select>
+
+<button class="create-btn" type="submit">
+🚀 Create Account
+</button>
+
+</form>
+
+<p class="login-text">
+Already have an account?
+<a href="login.html">Login</a>
+</p>
+
+</div>
+
+<script>
+
+function createAccount(event){
+
+    event.preventDefault();
+
+    let name =
+        document.getElementById("name").value.trim();
+
+    let username =
+        document.getElementById("username").value.trim();
+
+    let password =
+        document.getElementById("password").value;
+
+    let education =
+        document.getElementById("education").value;
+
+    let department =
+        document.getElementById("department").value;
+
+
+    let users =
+        JSON.parse(
+            localStorage.getItem("quizUsers")
+        ) || [];
+
+
+    /* SAME USERNAME IS ALLOWED */
+
+    /* PASSWORD MUST BE UNIQUE */
+
+    let passwordExists =
+        users.some(function(user){
+
+            return user.password === password;
+
+        });
+
+
+    if(passwordExists){
+
+        alert(
+            "⚠️ This password is already used.\n\n" +
+            "Please create another password."
+        );
+
+        return;
+    }
+
+
+    let newUser = {
+
+        name:name,
+
+        username:username,
+
+        password:password,
+
+        education:education,
+
+        department:department
+
+    };
+
+
+    users.push(newUser);
+
+
+    localStorage.setItem(
+        "quizUsers",
+        JSON.stringify(users)
+    );
+
+
+    /* VERY IMPORTANT */
+
+    localStorage.setItem(
+        "currentUser",
+        JSON.stringify(newUser)
+    );
+
+
+    localStorage.setItem(
+        "loggedIn",
+        "true"
+    );
+
+
+    alert(
+        "🎉 Account created successfully!"
+    );
+
+
+    window.location.href =
+        "home.html";
+
+}
+
+</script>
+
+</body>
+</html>
